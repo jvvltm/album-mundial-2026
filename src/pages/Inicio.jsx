@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useAlbum } from '../context/AlbumContext'
 import { getBanderaUrl } from '../data/banderas'
+import { useInstallPWA } from '../hooks/useInstallPWA'
 
 // ─── Sub-componentes ──────────────────────────────────────────
 
@@ -107,6 +108,7 @@ export default function Inicio() {
   const { getEstadisticas } = useAlbum()
   const stats = getEstadisticas()
   const completadas = stats.porSeleccion.filter((s) => s.completada).length
+  const { isInstallable, install } = useInstallPWA()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,12 +124,22 @@ export default function Inicio() {
               {stats.porcentaje}% completado · {completadas} de {stats.porSeleccion.length} selecciones completas
             </p>
           </div>
-          <Link
-            to="/intercambio"
-            className="shrink-0 flex items-center gap-1.5 text-sm font-medium text-yellow-700 bg-yellow-50 border border-yellow-200 px-3 py-1.5 rounded-full hover:bg-yellow-100 transition-colors"
-          >
-            🔄 Intercambio
-          </Link>
+          <div className="flex items-center gap-2 shrink-0">
+            {isInstallable && (
+              <button
+                onClick={install}
+                className="flex items-center gap-1.5 text-sm font-medium text-white bg-green-600 px-3 py-1.5 rounded-full hover:bg-green-700 active:scale-95 transition-all"
+              >
+                📲 Instalar
+              </button>
+            )}
+            <Link
+              to="/intercambio"
+              className="flex items-center gap-1.5 text-sm font-medium text-yellow-700 bg-yellow-50 border border-yellow-200 px-3 py-1.5 rounded-full hover:bg-yellow-100 transition-colors"
+            >
+              🔄 Intercambio
+            </Link>
+          </div>
         </div>
       </header>
 
